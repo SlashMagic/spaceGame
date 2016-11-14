@@ -10,8 +10,6 @@ import org.lwjgl.input.Keyboard;
 //import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class Main {
@@ -19,7 +17,7 @@ public class Main {
 	int width = 800;
 	int height = 600;
 	
-	boolean fullscreen = true;
+	boolean fullscreen = false;
 	
 	long lastFPS;
 	
@@ -32,9 +30,9 @@ public class Main {
 	int index = 0;
 	int indexProjectile = 0;
 	
-	int attackTimer = 0;
 	
-	 List<Projectile> projectiles = new ArrayList<Projectile>();
+	
+	
 	
 	 int getWidth(){
 		int width = Display.getWidth();
@@ -51,19 +49,15 @@ public class Main {
 		return newIndex;
 	}
 	
-	 int getAttackTimer(){
-		 return attackTimer;
-	 }
-	 
-	public  void createProjectile(Projectile newProjectile){
-		projectiles.add(newProjectile);
-	}
+	
 	
 	public void start(){
 		
 		try{
 			
 			if(fullscreen){
+				width = 1920;
+				height = 1080;
 				Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
 			}
 			if(!fullscreen){
@@ -118,15 +112,13 @@ public class Main {
 			
 			newCharacter.update();
 			
-			updateAttackTimer();
+			newWorld.update();
 			
-			for(int i = 0; i < projectiles.size(); i++){
-				Projectile newProjectile = projectiles.get(i);
-				newProjectile.update();
-				newProjectile.draw();
-			}
 			
-			System.out.println(attackTimer);
+			
+			
+			
+			//System.out.println(projectiles.size());
 			
 			
 			newWorld.draw();
@@ -164,11 +156,7 @@ public class Main {
 		fps++;
 	}
 	
-	public void updateAttackTimer(){
-		if(attackTimer != 0){
-			attackTimer--;
-		}
-	}
+
 	
 	public static void main(String[] args){
 		Main myMain = new Main();

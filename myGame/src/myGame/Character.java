@@ -10,7 +10,7 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 
-public class Character extends Main{
+public class Character{
 
 	
 	 float x = 0;
@@ -21,7 +21,7 @@ public class Character extends Main{
 	
 	 int index = 0;
 	 
-	 
+	 int attackTimer = 0;
 	
 	private  Texture textureSpaceShip;
 	
@@ -45,7 +45,7 @@ public class Character extends Main{
 	}
 	
 	 
-	
+	World newWorld = new World();
 	 
 	
 	public Character(int newX, int newY) {
@@ -77,6 +77,9 @@ public class Character extends Main{
 	
 	public void update(){
 		
+		if(attackTimer != 0){
+			attackTimer--;
+		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_A) && xVel > -1){
 			xVel -= 0.01;
@@ -96,14 +99,18 @@ public class Character extends Main{
 		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
+			
 			if(xVel > 0){
 				xVel -= 0.01;
 			}
+			
 			if(xVel < 0){
 				xVel += 0.01;
 			}
+			
 			if(yVel > 0){
 				yVel -= 0.01;
+				
 			}
 			if(yVel < 0){
 				yVel += 0.01;
@@ -111,7 +118,7 @@ public class Character extends Main{
 			
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && attackTimer == 0){
+		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
 			
 			attackTimer = 72;
 			
@@ -128,9 +135,9 @@ public class Character extends Main{
 				index = 0;
 				break;
 			}
-			
-			projectiles.add(new Projectile(newX, y, xVel, yVel));
 		
+			newWorld.createProjectile(new Projectile(newX, y, xVel, yVel));
+			
 		}
 		
 		
@@ -139,9 +146,9 @@ public class Character extends Main{
 			x = 0;
 		}
 		
-		if(x > getWidth() - 24){
+		if(x > 800 - 24){
 			xVel = 0;
-			x = getWidth() - 24;
+			x = 800 - 24;
 		}	
 			
 		if(y < 0){
@@ -149,20 +156,22 @@ public class Character extends Main{
 			y = 0;
 		}
 		
-		if(y > getHeight() - 34){
+		if(y > 600 - 34){
 			yVel = 0;
-			y = getHeight() - 34;
+			y = 600 - 34;
 		}
 		
 		x += xVel;
 		y += yVel;
+		
+		
 	}
 	
 	
 	public  void draw() {
 		drawTexture(textureSpaceShip);
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_W) && yVel > -1){
+		if(Keyboard.isKeyDown(Keyboard.KEY_W)){
 			drawTexture(flames[0], x + 11, y + 30);
 			drawTexture(flames[0], x + 6, y + 30);
 		}
