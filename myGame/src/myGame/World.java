@@ -1,6 +1,8 @@
 package myGame;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
@@ -11,6 +13,8 @@ public class World {
 
 	 Texture textureBackground;
 	
+	 List<Projectile> projectiles = new ArrayList<Projectile>();
+	 
 	public World() {
 		
 		loadData();
@@ -29,6 +33,20 @@ public class World {
 		}
 		
 	}
+	 
+	 public void update(){
+		 for(int i = 0; i < projectiles.size(); i++){
+			 System.out.println("NO!");
+				projectiles.get(i).update();
+				projectiles.get(i).draw();
+		 }
+	 }
+	 
+	 
+	 public  void createProjectile(Projectile newProjectile){
+		 	
+			projectiles.add(new Projectile(100, 500, 1, 1));
+		}
 	
 	public  void draw(){
 		
