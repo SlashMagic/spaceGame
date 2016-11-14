@@ -9,7 +9,7 @@ import org.newdawn.slick.util.ResourceLoader;
 
 public class World {
 
-	static Texture textureBackground;
+	 Texture textureBackground;
 	
 	public World() {
 		
@@ -18,7 +18,7 @@ public class World {
 	}
 	
 	
-	static void loadData(){
+	 void loadData(){
 		try{
 			
 			textureBackground = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/spaceBackground.png"), GL11.GL_NEAREST);
@@ -30,12 +30,12 @@ public class World {
 		
 	}
 	
-	public static void draw(){
+	public  void draw(){
 		
 		drawTexture(textureBackground, 0, 0);
 	}
 	
-	static void drawTexture(Texture newTexture, int newX, int newY){
+	 void drawTexture(Texture newTexture, int newX, int newY){
 		
 		newTexture.bind();
 		
