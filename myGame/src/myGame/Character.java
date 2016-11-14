@@ -44,12 +44,10 @@ public class Character{
 		return yVel;
 	}
 	
-	 
-	World newWorld = new World();
-	 
+	 World gameWorld;
 	
-	public Character(int newX, int newY) {
-		
+	public Character(World newWorld, int newX, int newY) {
+		gameWorld = newWorld;
 		x = newX;
 		y = newY;
 		
@@ -136,7 +134,7 @@ public class Character{
 				break;
 			}
 		
-			newWorld.createProjectile(new Projectile(newX, y, xVel, yVel));
+			gameWorld.createProjectile(new Projectile(newX, y, xVel, yVel));
 			
 		}
 		
