@@ -92,9 +92,11 @@ public class Main {
 		GL11.glOrtho(0, width, height, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		
-		Character newCharacter = new Character(100, 100);
+		World gameWorld = new World();
 		
-		World newWorld = new World();
+		Character newCharacter = new Character(gameWorld, 100, 100);
+		
+		
 		
 		while(!Display.isCloseRequested() && !exit){
 			
@@ -112,7 +114,7 @@ public class Main {
 			
 			newCharacter.update();
 			
-			newWorld.update();
+			gameWorld.update();
 			
 			
 			
@@ -121,7 +123,7 @@ public class Main {
 			//System.out.println(projectiles.size());
 			
 			
-			newWorld.draw();
+			gameWorld.draw();
 			
 			newCharacter.draw();
 			
