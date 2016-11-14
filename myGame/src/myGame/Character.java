@@ -10,45 +10,43 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 
-public class Character {
+public class Character extends Main{
 
 	
-	static float x = 0;
-	static float y = 0;
+	 float x = 0;
+	 float y = 0;
 	
-	static float xVel = 0;
-	static float yVel = 0;
+	 float xVel = 0;
+	 float yVel = 0;
 	
-	static int attackTimer = 0;
+	 int index = 0;
+	 
+	 
 	
-	static int index = 0;
+	private  Texture textureSpaceShip;
 	
-	private static Texture textureSpaceShip;
+	Texture[] flames = new Texture[4];
+	Texture pew;
 	
-	static float getX(){
+	 float getX(){
 		return x;
 	}
 	
-	static float getY(){
+	 float getY(){
 		return y;
 	}
 	
-	static float getxVel(){
+	 float getxVel(){
 		return xVel;
 	}
 	
-	static float getyVel(){
+	 float getyVel(){
 		return yVel;
 	}
 	
-	static int getAttackTimer(){
-		int timer = attackTimer;
-		return timer;
-	}
+	 
 	
-	static void setAttackTimer(int newTime){
-		attackTimer = newTime;
-	}
+	 
 	
 	public Character(int newX, int newY) {
 		
@@ -59,25 +57,27 @@ public class Character {
 		
 	}
 	
-	public static void createProjectile(float newX, float newY, float newXVel, float newYVel){
-		
-		Projectile newProjectile = new Projectile(newX, newY, newXVel, newYVel);
-		Main.createProjectile(newProjectile);
-	}
+	
 	
 	
 	void loadData(){
 		try{
 			
 			textureSpaceShip = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/spaceShip.png"), GL11.GL_NEAREST);
-			
+			flames[0] = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/flames.png"), GL11.GL_NEAREST);
+			flames[1] = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/flames1.png"), GL11.GL_NEAREST);
+			flames[2] = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/flames2.png"), GL11.GL_NEAREST);
+			flames[3] = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/flames3.png"), GL11.GL_NEAREST);
+			pew = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/pew.png"), GL11.GL_NEAREST);
 		}
 		catch (IOException e){
 			e.printStackTrace();
 		}
 	}
 	
-	public static void update(){
+	public void update(){
+		
+		
 		if(Keyboard.isKeyDown(Keyboard.KEY_A) && xVel > -1){
 			xVel -= 0.01;
 		}
@@ -88,7 +88,7 @@ public class Character {
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_W) && yVel > -1){
 			yVel -= 0.01;
-			
+		
 		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_S) && yVel < 1){
@@ -119,26 +119,29 @@ public class Character {
 			
 			switch(index){
 			case 0:
-				newX = Character.getX();
+				newX = x;
 				index = 1;
 				break;
 				
 			case 1:
-				newX = Character.getX() + 21;
+				newX = x + 21;
 				index = 0;
 				break;
+			}
+			
+			projectiles.add(new Projectile(newX, y, xVel, yVel));
+		
 		}
-			createProjectile(newX, y, xVel, yVel);
-		}
+		
 		
 		if(x < 0 ){
 			xVel = 0;
 			x = 0;
 		}
 		
-		if(x > Main.getWidth() - 24){
+		if(x > getWidth() - 24){
 			xVel = 0;
-			x = Main.getWidth() - 24;
+			x = getWidth() - 24;
 		}	
 			
 		if(y < 0){
@@ -146,32 +149,58 @@ public class Character {
 			y = 0;
 		}
 		
-		if(y > Main.getHeight() - 34){
+		if(y > getHeight() - 34){
 			yVel = 0;
-			y = Main.getHeight() - 34;
+			y = getHeight() - 34;
 		}
 		
 		x += xVel;
 		y += yVel;
 	}
 	
-	/*static float getAngle(){
-		float angle = 0;
-		
-		int mouseX = Mouse.getX();
-		int mouseY = Mouse.getY();
-		
-		angle = (float) Math.atan2(mouseY-y, mouseX-x);
-		angle = (float) (angle*(180/Math.PI));
-		System.out.println(angle);
-		return angle;
-	}*/
 	
-	public static void draw() {
+	public  void draw() {
 		drawTexture(textureSpaceShip);
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_W) && yVel > -1){
+			drawTexture(flames[0], x + 11, y + 30);
+			drawTexture(flames[0], x + 6, y + 30);
+		}
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_A)){
+			drawTexture(flames[3],x + 14, y + 11);
+		}
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_S)){
+			drawTexture(flames[2], x + 1.8f, y + 16);
+			drawTexture(flames[2], x + 15.2f, y + 16);
+		}
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_D)){
+			drawTexture(flames[1], x + 2.5f, y + 11);
+		}
+		
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
+			if(xVel > 0.1){
+				drawTexture(flames[3], x + 14, y + 11);
+			}
+			if(xVel < -0.1){
+				drawTexture(flames[1], x + 1.5f, y + 11);
+			}
+			if(yVel > 0.1){
+				drawTexture(flames[0], x + 11, y + 30);
+				drawTexture(flames[0], x + 6,y + 30);
+			}
+			if(yVel < -0.1){
+				drawTexture(flames[2], x + 1.8f, y + 16);
+				drawTexture(flames[2], x + 15.2f, y + 16);
+			}
+			
+		}
 	}
 	
-	static void drawTexture(Texture newTexture){
+	 void drawTexture(Texture newTexture){
 		
 		
 		
@@ -190,5 +219,21 @@ public class Character {
     	GL11.glEnd();
     	
 	}
-
+	 
+	void drawTexture(Texture newTexture, float newX, float newY){
+		newTexture.bind();
+		
+		GL11.glBegin(GL11.GL_QUADS);
+			
+			GL11.glTexCoord2f(0,0);
+	   		GL11.glVertex2f(newX,newY);
+	   		GL11.glTexCoord2f(1,0);
+    		GL11.glVertex2f(newX + newTexture.getTextureWidth(),newY);
+    		GL11.glTexCoord2f(1,1);
+    		GL11.glVertex2f(newX+newTexture.getTextureWidth(),newY+newTexture.getTextureHeight());
+    		GL11.glTexCoord2f(0,1);
+    		GL11.glVertex2f(newX,newY+newTexture.getTextureHeight());	
+    	GL11.glEnd();
+	}
+	 
 }

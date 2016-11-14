@@ -19,7 +19,7 @@ public class Main {
 	int width = 800;
 	int height = 600;
 	
-	boolean fullscreen = false;
+	boolean fullscreen = true;
 	
 	long lastFPS;
 	
@@ -29,40 +29,37 @@ public class Main {
 	
 	boolean exit = false;
 	
-	static int index = 0;
-	static int indexProjectile = 0;
+	int index = 0;
+	int indexProjectile = 0;
 	
+	int attackTimer = 0;
 	
+	 List<Projectile> projectiles = new ArrayList<Projectile>();
 	
-	static List<Projectile> projectiles = new ArrayList<Projectile>();
-	
-	static int getWidth(){
+	 int getWidth(){
 		int width = Display.getWidth();
 		return width;
 	}
 	
-	static int getHeight(){
+	 int getHeight(){
 		int height = Display.getHeight();
 		return height;
 	}
 	
-	
-	
-	static int getIndexProjectile(){
+	 int getIndexProjectile(){
 		int newIndex = index;
 		return newIndex;
 	}
 	
-	public static void createProjectile(Projectile newProjectile){
+	 int getAttackTimer(){
+		 return attackTimer;
+	 }
+	 
+	public  void createProjectile(Projectile newProjectile){
 		projectiles.add(newProjectile);
 	}
 	
-	
-	
 	public void start(){
-		
-		
-		
 		
 		try{
 			
@@ -101,48 +98,40 @@ public class Main {
 		GL11.glOrtho(0, width, height, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		
-		new Character(100, 100);
+		Character newCharacter = new Character(100, 100);
 		
-		new Projectile(-100, -100, 0, 0);
-		
-		new World();
-		
-		new Effects();
+		World newWorld = new World();
 		
 		while(!Display.isCloseRequested() && !exit){
-			
-			
-			
-			updateTimer();
 			
 			updateFPS();
 			
 			Keyboard.poll();
+			
 			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
 				exit = true;
 			}
-			
-		
-			
-			//int delta = getDelta();
 			
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			
 			Color.white.bind();
 			
-			Character.update();
+			newCharacter.update();
+			
+			updateAttackTimer();
 			
 			for(int i = 0; i < projectiles.size(); i++){
-				
+				Projectile newProjectile = projectiles.get(i);
+				newProjectile.update();
+				newProjectile.draw();
 			}
 			
-			System.out.println(projectiles.size());
+			System.out.println(attackTimer);
 			
 			
-			World.draw();
-			Character.draw();
-			Projectile.draw();
-			Effects.draw();
+			newWorld.draw();
+			
+			newCharacter.draw();
 			
 			Display.update();
 			
@@ -175,9 +164,9 @@ public class Main {
 		fps++;
 	}
 	
-	public void updateTimer(){
-		if(Character.getAttackTimer() != 0){
-			Character.setAttackTimer(Character.getAttackTimer() - 1);
+	public void updateAttackTimer(){
+		if(attackTimer != 0){
+			attackTimer--;
 		}
 	}
 	

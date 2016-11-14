@@ -10,14 +10,14 @@ import org.newdawn.slick.util.ResourceLoader;
 
 public class Projectile {
 
-	static float x = -10;
-	static float y = -10;
+	 float x = -10;
+	 float y = -10;
 	
-	static float xVel = 0;
-	static float yVel = 0;
+	 float xVel = 0;
+	 float yVel = 0;
 	
 	
-	private static Texture textureProjectile;
+	private  Texture textureProjectile;
 	
 	public float getY(){
 		return y;
@@ -35,7 +35,7 @@ public class Projectile {
 		loadData();
 	}
 	
-	static void loadData(){
+	 void loadData(){
 		try{
 			
 			textureProjectile = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/projectileLaser.png"), GL11.GL_NEAREST);
@@ -46,17 +46,17 @@ public class Projectile {
 		}
 	}
 	
-	public static void update(){
+	public  void update(){
 		x += xVel;
 		y -= yVel;
 	}
 	
-	public static void draw() {
+	public  void draw() {
 		
 		drawTexture(textureProjectile);
 	}
 	
-	static void drawTexture(Texture newTexture){
+	 void drawTexture(Texture newTexture){
 		
 		newTexture.bind();
 		
