@@ -22,7 +22,10 @@ public class Character{
 	 int index = 0;
 	 
 	 int attackTimer = 0;
-	
+	 
+	 float speed = 0.0015f;
+	 float maxSpeed = 0.1f;
+	 
 	private  Texture textureSpaceShip;
 	
 	Texture[] flames = new Texture[4];
@@ -73,54 +76,60 @@ public class Character{
 		}
 	}
 	
-	public void update(){
+	public void update(int delta){
 		
 		if(attackTimer != 0){
 			attackTimer--;
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_A) && xVel > -1){
-			xVel -= 0.01;
+		if(delta == 17){
+			delta = 16;
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_D) && xVel < 1){
-			xVel += 0.01;
+		if(Keyboard.isKeyDown(Keyboard.KEY_A) && xVel > -delta*maxSpeed){
+			xVel -= delta*speed;
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_W) && yVel > -1){
-			yVel -= 0.01;
+		if(Keyboard.isKeyDown(Keyboard.KEY_D) && xVel < delta*maxSpeed){
+			xVel += delta*speed;
+		}
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_W) && yVel > -delta*maxSpeed){
+			yVel -= delta*speed;
 		
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_S) && yVel < 1){
-			yVel += 0.01;
+		if(Keyboard.isKeyDown(Keyboard.KEY_S) && yVel < delta*maxSpeed){
+			yVel += delta*speed;
 		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
 			
 			if(xVel > 0){
-				xVel -= 0.01;
+				xVel -= delta*speed;
 			}
 			
 			if(xVel < 0){
-				xVel += 0.01;
+				xVel += delta*speed;
 			}
 			
 			if(yVel > 0){
-				yVel -= 0.01;
+				yVel -= delta*speed;
 				
 			}
 			if(yVel < 0){
-				yVel += 0.01;
+				yVel += delta*speed;
 			}
 			
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
+		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && attackTimer == 0){
 			
 			attackTimer = 72;
 			
 			float newX = 0;
+			
+			
 			
 			switch(index){
 			case 0:
@@ -133,8 +142,8 @@ public class Character{
 				index = 0;
 				break;
 			}
-		
-			gameWorld.createProjectile(new Projectile(newX, y, xVel, yVel));
+			
+			gameWorld.createProjectile(new Projectile(newX, y, xVel, yVel) , newX, y, xVel, yVel);
 			
 		}
 		

@@ -30,7 +30,7 @@ public class Projectile {
 		y = newY + 17;
 		
 		xVel = xVelShip;
-		yVel = 0.5f;
+		yVel = 2f;
 		
 		loadData();
 	}
@@ -46,7 +46,7 @@ public class Projectile {
 		}
 	}
 	
-	public  void update(){
+	public  void update(int delta){
 		x += xVel;
 		y -= yVel;
 	}
