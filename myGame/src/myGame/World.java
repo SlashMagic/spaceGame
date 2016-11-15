@@ -34,23 +34,22 @@ public class World {
 		
 	}
 	 
-	 public void update(){
-		 for(int i = 0; i < projectiles.size(); i++){
-			 System.out.println("NO!");
-				projectiles.get(i).update();
-				projectiles.get(i).draw();
-		 }
-	 }
+	
 	 
-	 
-	 public  void createProjectile(Projectile newProjectile){
+	 public  void createProjectile(Projectile newProjectile, float newX, float newY, float newXVel, float newYVel){
 		 	
-			projectiles.add(new Projectile(100, 500, 1, 1));
+			projectiles.add(new Projectile(newX, newY, newXVel, newYVel));
 		}
 	
-	public  void draw(){
+	public  void draw( int delta){
 		
 		drawTexture(textureBackground, 0, 0);
+		
+		for(int i = 0; i < projectiles.size(); i++){
+			 
+				projectiles.get(i).update(delta);
+				projectiles.get(i).draw();
+		 }
 	}
 	
 	 void drawTexture(Texture newTexture, int newX, int newY){

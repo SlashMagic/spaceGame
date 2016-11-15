@@ -30,10 +30,6 @@ public class Main {
 	int index = 0;
 	int indexProjectile = 0;
 	
-	
-	
-	
-	
 	 int getWidth(){
 		int width = Display.getWidth();
 		return width;
@@ -56,8 +52,8 @@ public class Main {
 		try{
 			
 			if(fullscreen){
-				width = 1920;
-				height = 1080;
+				//width = 1920;
+				//height = 1080;
 				Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
 			}
 			if(!fullscreen){
@@ -108,28 +104,23 @@ public class Main {
 				exit = true;
 			}
 			
+			int delta = getDelta();
+			
+			System.out.println(delta);
+			
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			
 			Color.white.bind();
 			
-			newCharacter.update();
+			newCharacter.update(delta);
 			
-			gameWorld.update();
-			
-			
-			
-			
-			
-			//System.out.println(projectiles.size());
-			
-			
-			gameWorld.draw();
+			gameWorld.draw(delta);
 			
 			newCharacter.draw();
 			
 			Display.update();
 			
-			Display.sync(144);
+			Display.sync(20);
 			
 		}
 		
