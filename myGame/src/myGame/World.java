@@ -41,7 +41,7 @@ public class World {
 			projectiles.add(new Projectile(newX, newY, newXVel, newYVel));
 		}
 	
-	public  void draw( int delta){
+	public  void draw( float delta){
 		
 		drawTexture(textureBackground, 0, 0);
 		

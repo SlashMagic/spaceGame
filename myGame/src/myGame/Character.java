@@ -76,7 +76,7 @@ public class Character{
 		}
 	}
 	
-	public void update(int delta){
+	public void update(float delta){
 		
 		if(attackTimer != 0){
 			attackTimer--;
@@ -86,43 +86,44 @@ public class Character{
 			delta = 16;
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_A) && xVel > -delta*maxSpeed){
-			xVel -= delta*speed;
+		if(Keyboard.isKeyDown(Keyboard.KEY_A) && xVel > -(float)delta*maxSpeed){
+			xVel -= (float)delta*speed;
+			
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_D) && xVel < delta*maxSpeed){
-			xVel += delta*speed;
+		if(Keyboard.isKeyDown(Keyboard.KEY_D) && xVel < (float)delta*maxSpeed){
+			xVel += (float)delta*speed;
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_W) && yVel > -delta*maxSpeed){
-			yVel -= delta*speed;
+		if(Keyboard.isKeyDown(Keyboard.KEY_W) && yVel > -(float)delta*maxSpeed){
+			yVel -= (float)delta*speed;
 		
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_S) && yVel < delta*maxSpeed){
-			yVel += delta*speed;
+		if(Keyboard.isKeyDown(Keyboard.KEY_S) && yVel < (float)delta*maxSpeed){
+			yVel += (float)delta*speed;
 		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
 			
 			if(xVel > 0){
-				xVel -= delta*speed;
+				xVel -= (float)delta*speed;
 			}
 			
 			if(xVel < 0){
-				xVel += delta*speed;
+				xVel += (float)delta*speed;
 			}
 			
 			if(yVel > 0){
-				yVel -= delta*speed;
+				yVel -= (float)delta*speed;
 				
 			}
 			if(yVel < 0){
-				yVel += delta*speed;
+				yVel += (float)delta*speed;
 			}
 			
 		}
-		
+		System.out.println(xVel);
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && attackTimer == 0){
 			
 			attackTimer = 72;

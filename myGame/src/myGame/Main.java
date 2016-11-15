@@ -104,7 +104,7 @@ public class Main {
 				exit = true;
 			}
 			
-			int delta = getDelta();
+			float delta = getDelta();
 			
 			System.out.println(delta);
 			
@@ -120,7 +120,7 @@ public class Main {
 			
 			Display.update();
 			
-			Display.sync(20);
+			Display.sync(120);
 			
 		}
 		
@@ -128,9 +128,9 @@ public class Main {
 		
 	}
 	
-	public int getDelta(){
+	public float getDelta(){
 		long time = getTime();
-		int delta = (int)(time - lastFrame);
+		float delta = (int)(time - lastFrame);
 		lastFrame = time;
 		
 		return delta;

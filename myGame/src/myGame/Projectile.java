@@ -46,7 +46,7 @@ public class Projectile {
 		}
 	}
 	
-	public  void update(int delta){
+	public  void update(float delta){
 		x += xVel;
 		y -= yVel;
 	}
