@@ -85,25 +85,47 @@ public class Character{
 		
 		currentAngle = shipAngle;
 		
-		if(currentAngle != desiredAngle){
+		
+		
+		System.out.println(currentAngle + ":" + desiredAngle);
+		
+		
+		
+		if(!(currentAngle < desiredAngle+1 && currentAngle>desiredAngle-1) ){
 			if(desiredAngle > currentAngle){
 				if(Math.abs(desiredAngle - currentAngle) < 180){
 					shipAngle += 0.5;
+					if(shipAngle > 180){
+						shipAngle = -180;
+					}
+					
 				}
+			
 				else{
 					shipAngle -= 0.5;
+					if(shipAngle < -180){
+						shipAngle = 180;
+					}
+
 				}
+		}
 				
-			}
+			
 			else{
 				if(Math.abs(currentAngle - desiredAngle) < 180){
 					shipAngle -= 0.5;
+					if(shipAngle < -180){
+						shipAngle = 180;
+					}
 				}
 				else{
 					shipAngle += 0.5;
+					if(shipAngle > 180){
+						shipAngle = -180;
+					}
 				}
 			}
-		}
+		}	
 		
 		
 		if(attackTimer != 0){
