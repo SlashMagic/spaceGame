@@ -7,7 +7,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
-//import org.lwjgl.input.Mouse;
+
 import org.newdawn.slick.Color;
 
 
@@ -63,6 +63,7 @@ public class Main {
 			Display.create();
 			Keyboard.create();
 			
+			
 		} catch (LWJGLException e){
 			e.printStackTrace();
 			System.exit(0);
@@ -104,9 +105,9 @@ public class Main {
 				exit = true;
 			}
 			
-			float delta = getDelta();
+			int delta = getDelta();
 			
-			System.out.println(delta);
+			
 			
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			
@@ -120,7 +121,7 @@ public class Main {
 			
 			Display.update();
 			
-			Display.sync(120);
+			Display.sync(144);
 			
 		}
 		
@@ -128,9 +129,9 @@ public class Main {
 		
 	}
 	
-	public float getDelta(){
+	public int getDelta(){
 		long time = getTime();
-		float delta = (int)(time - lastFrame);
+		int delta = (int)(time - lastFrame);
 		lastFrame = time;
 		
 		return delta;

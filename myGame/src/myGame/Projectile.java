@@ -13,8 +13,8 @@ public class Projectile {
 	 float x = -10;
 	 float y = -10;
 	
-	 float xVel = 0;
-	 float yVel = 0;
+	 double xVel = 0;
+	 double yVel = 0;
 	
 	
 	private  Texture textureProjectile;
@@ -23,14 +23,14 @@ public class Projectile {
 		return y;
 	}
 	
-	public Projectile(float newX, float newY, float xVelShip, float yVelShip) {
+	public Projectile(float newX, float newY, double newXVel, double newYVel) {
 		
 		
 		x = newX;
 		y = newY + 17;
 		
-		xVel = xVelShip;
-		yVel = 2f;
+		xVel = newXVel;
+		yVel = newYVel;
 		
 		loadData();
 	}
@@ -46,7 +46,7 @@ public class Projectile {
 		}
 	}
 	
-	public  void update(float delta){
+	public  void update(int delta){
 		x += xVel;
 		y -= yVel;
 	}

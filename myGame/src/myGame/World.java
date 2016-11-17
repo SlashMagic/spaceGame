@@ -36,12 +36,12 @@ public class World {
 	 
 	
 	 
-	 public  void createProjectile(Projectile newProjectile, float newX, float newY, float newXVel, float newYVel){
+	 public  void createProjectile(Projectile newProjectile, float newX, float newY, double newXVel, double newYVel){
 		 	
 			projectiles.add(new Projectile(newX, newY, newXVel, newYVel));
 		}
 	
-	public  void draw( float delta){
+	public  void draw( int delta){
 		
 		drawTexture(textureBackground, 0, 0);
 		
