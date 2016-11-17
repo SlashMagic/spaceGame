@@ -85,7 +85,7 @@ public class Character{
 		
 		currentAngle = shipAngle;
 		
-		
+		float rotational_speed = (float)0.05*delta;
 		
 		System.out.println(currentAngle + ":" + desiredAngle);
 		
@@ -94,7 +94,7 @@ public class Character{
 		if(!(currentAngle < desiredAngle+1 && currentAngle>desiredAngle-1) ){
 			if(desiredAngle > currentAngle){
 				if(Math.abs(desiredAngle - currentAngle) < 180){
-					shipAngle += 0.5;
+					shipAngle += rotational_speed;
 					if(shipAngle > 180){
 						shipAngle = -180;
 					}
@@ -102,7 +102,7 @@ public class Character{
 				}
 			
 				else{
-					shipAngle -= 0.5;
+					shipAngle -= rotational_speed;
 					if(shipAngle < -180){
 						shipAngle = 180;
 					}
@@ -113,13 +113,13 @@ public class Character{
 			
 			else{
 				if(Math.abs(currentAngle - desiredAngle) < 180){
-					shipAngle -= 0.5;
+					shipAngle -= rotational_speed;
 					if(shipAngle < -180){
 						shipAngle = 180;
 					}
 				}
 				else{
-					shipAngle += 0.5;
+					shipAngle += rotational_speed;
 					if(shipAngle > 180){
 						shipAngle = -180;
 					}

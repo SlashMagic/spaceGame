@@ -121,7 +121,7 @@ public class Main {
 			
 			Display.update();
 			
-			Display.sync(144);
+			Display.sync(60);
 			
 		}
 		
@@ -143,7 +143,7 @@ public class Main {
 	
 	public void updateFPS(){
 		if (getTime() - lastFPS > 1000) {
-			Display.setTitle("FPS: " + fps);
+			Display.setTitle("Current: " + fps);
 			fps = 0;
 			lastFPS += 1000;
 		}
