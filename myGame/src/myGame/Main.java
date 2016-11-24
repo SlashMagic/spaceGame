@@ -17,7 +17,7 @@ public class Main {
 	int width = 800;
 	int height = 600;
 	
-	boolean fullscreen = false;
+	boolean fullscreen = true;
 	
 	long lastFPS;
 	
@@ -121,7 +121,7 @@ public class Main {
 			
 			Display.update();
 			
-			Display.sync(60);
+			Display.sync(144);
 			
 		}
 		

@@ -12,33 +12,35 @@ import org.newdawn.slick.util.ResourceLoader;
 
 public class Character{
 	
-	 float x = 0;
-	 float y = 0;
+	static float x = 0;
+	static float y = 0;
 	
-	 float xVel = 0;
-	 float yVel = 0;
+	float xVel = 0;
+	float yVel = 0;
 	
-	 int index = 0;
-	 
-	 int attackTimer = 0;
-	 
-	 float speed = 0.001f;
-	 float maxSpeed = 0.1f;
-	 
-	 double desiredAngle = 0;
-	 double currentAngle = 0;
-	 double shipAngle = 0;
+	int index = 0;
+	
+	int attackTimer = 0;
+	
+	float speed = 0.001f;
+	float maxSpeed = 0.1f;
+	
+	double desiredAngle = 0;
+	double currentAngle = 180;
+	double shipAngle = 180;
+	double velocityAngle = 0;
+	double totalVelocity = 0;
 	 
 	private  Texture textureSpaceShip;
 	
-	Texture[] flames = new Texture[4];
-	Texture pew;
+	private Texture[] flames = new Texture[4];
+	private Texture pew;
 	
-	 float getX(){
+	 static float getX(){
 		return x;
 	}
 	
-	 float getY(){
+	 static float getY(){
 		return y;
 	}
 	
@@ -85,13 +87,12 @@ public class Character{
 		
 		currentAngle = shipAngle;
 		
-		float rotational_speed = (float)0.05*delta;
+		float rotational_speed = 0.1f;
 		
-		System.out.println(currentAngle + ":" + desiredAngle);
+	
 		
 		
-		
-		if(!(currentAngle < desiredAngle+1 && currentAngle>desiredAngle-1) ){
+		/*if(!(currentAngle < desiredAngle+1 && currentAngle>desiredAngle-1) ){
 			if(desiredAngle > currentAngle){
 				if(Math.abs(desiredAngle - currentAngle) < 180){
 					shipAngle += rotational_speed;
@@ -125,7 +126,7 @@ public class Character{
 					}
 				}
 			}
-		}	
+		}	*/
 		
 		
 		if(attackTimer != 0){
@@ -140,25 +141,65 @@ public class Character{
 			delta = 7;
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_A) && xVel > -(float)delta*maxSpeed){
-			xVel -= (float)delta*speed;
-			
-		}
+		velocityAngle = Math.atan2(yVel, xVel);
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_D) && xVel < (float)delta*maxSpeed){
-			xVel += (float)delta*speed;
-		}
+		totalVelocity = Math.sqrt(Math.pow((xVel * Math.cos(velocityAngle)), 2) +  Math.pow((yVel * Math.sin(velocityAngle)), 2));
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_W) && yVel > -(float)delta*maxSpeed){
-			yVel -= (float)delta*speed;
-			
-		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_S) && yVel < (float)delta*maxSpeed){
-			yVel += (float)delta*speed;
+		
+		if(totalVelocity > 1){
+			if(xVel > 0){
+				xVel -= 0.0001;
+			}
+			if(xVel < 0){
+				xVel += 0.0001;
+			}
+			if(yVel > 0){
+				yVel -= 0.0001;
+			}
+			if(yVel < 0){
+				yVel += 0.0001;
+			}
 		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
+			shipAngle += delta*rotational_speed;
+			if(currentAngle > 180){
+				shipAngle = -180;
+			}
+		}
+
+		if(Keyboard.isKeyDown(Keyboard.KEY_E)){
+			shipAngle -= delta*rotational_speed;
+			if(currentAngle < -180){
+				shipAngle = 180;
+			}
+			
+		}
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_A) && totalVelocity < 1){
+			yVel += (float)((delta*speed) * ((Math.cos((currentAngle + 90) * (Math.PI / 180)))));
+			xVel += (float)((delta*speed) * ((Math.sin((currentAngle + 90) * (Math.PI / 180)))));
+			
+		}
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_D) && totalVelocity < 1){
+			yVel -= (float)((delta*speed) * ((Math.cos((currentAngle + 90) * (Math.PI / 180)))));
+			xVel -= (float)((delta*speed) * ((Math.sin((currentAngle + 90) * (Math.PI / 180)))));
+		}
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_W) && totalVelocity < 1){
+			yVel += (float)(1.5*(delta*speed) * ((Math.cos((currentAngle) * (Math.PI / 180)))));
+			xVel += (float)(1.5*(delta*speed) * ((Math.sin((currentAngle) * (Math.PI / 180)))));
+			
+		}
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_S) && totalVelocity < 1){
+			yVel -= (float)((delta*speed) * ((Math.cos((currentAngle) * (Math.PI / 180)))));
+			xVel -= (float)((delta*speed) * ((Math.sin((currentAngle) * (Math.PI / 180)))));
+		}
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
 			
 			if(xVel > 0){
 				xVel -= (float)delta*speed;
@@ -176,25 +217,65 @@ public class Character{
 				yVel += (float)delta*speed;
 			}
 			
+			if(totalVelocity < 0.01){
+				yVel = 0;
+				xVel = 0;
+			}
+			
 		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && attackTimer == 0){
 			
+			gameWorld.createEnemy();
+			
 			attackTimer = 72;
 			
 			float newX = 0;
+			float newY = 0;
 			
 			
 			
 			switch(index){
 			case 0:
-				newX = x;
+				if(currentAngle > 135 || currentAngle < -135){
+					newX = x + 4;
+					newY = y + 20;
+				}
+				if(currentAngle <= 135 && currentAngle >= 45){
+					newX = x + 8;
+					newY = y + 10;
+				}
+				if(currentAngle < 45 && currentAngle > - 45 ){
+					newX = x + 18;
+					newY = y + 12;
+				}
+				if(currentAngle < -45 && currentAngle > -135){
+					newX = x + 14;
+					newY = y + 24;
+				}
+				
+				
 				index = 1;
-				//currentAngle = Math.atan2(Mouse.getX() - x, (Display.getHeight() - Mouse.getY()) - y);
+				
 				break;
 				
 			case 1:
-				newX = x + 21;
+				if(currentAngle > 135 || currentAngle < -135){
+					newX = x + 23;
+					newY = y + 20;
+				}
+				if(currentAngle <= 135 && currentAngle >= 45){
+					newX = x + 8;
+					newY = y + 29;
+				}
+				if(currentAngle < 45 && currentAngle > - 45 ){
+					newX = x - 1;
+					newY = y + 12;
+				}
+				if(currentAngle < -45 && currentAngle > -135){
+					newX = x + 14;
+					newY = y + 5;
+				}
 				index = 0;
 				
 				break;
@@ -205,16 +286,13 @@ public class Character{
 			
 			double velocity = 1.5f;
 			
-			System.out.println(currentAngle - 90);
+			
 			
 			newXVel =  (velocity * Math.cos((currentAngle - 90) * (Math.PI / 180)));
 			newYVel =  (velocity * Math.sin((currentAngle - 90) * (Math.PI / 180)));
 			
-			System.out.println(newXVel);
-			System.out.println(newYVel);
 			
-			System.out.println();
-			gameWorld.createProjectile(new Projectile(newX, y, newXVel, newYVel) , newX, y, newXVel, newYVel);
+			gameWorld.createProjectile(new Projectile(newX, newY, newXVel, newYVel, currentAngle) , newX, newY, newXVel, newYVel, currentAngle);
 			
 		}
 		
@@ -265,7 +343,7 @@ public class Character{
 		}
 		
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
 			if(xVel > 0.1){
 				drawTexture(flames[3], x + 14, y + 11);
 			}
@@ -281,6 +359,14 @@ public class Character{
 				drawTexture(flames[2], x + 15.2f, y + 16);
 			}
 			
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && attackTimer > 62){
+			if(index == 1){
+				drawTexture(pew, x - 3, y + 14);
+			}
+			if(index == 0){
+				drawTexture(pew, x + 16, y + 15);
+			}
 		}
 	}
 	
@@ -317,7 +403,7 @@ public class Character{
     	GL11.glEnd();
     	
     	GL11.glPopMatrix();
-    	
+    	 
 	}
 	 
 	void drawTexture(Texture newTexture, float newX, float newY){

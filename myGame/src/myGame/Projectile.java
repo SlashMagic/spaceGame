@@ -16,21 +16,24 @@ public class Projectile {
 	 double xVel = 0;
 	 double yVel = 0;
 	
-	
+	double projectileAngle = 0;
+	 
 	private  Texture textureProjectile;
 	
 	public float getY(){
 		return y;
 	}
 	
-	public Projectile(float newX, float newY, double newXVel, double newYVel) {
+	public Projectile(float newX, float newY, double newXVel, double newYVel, double newAngle) {
 		
 		
 		x = newX;
-		y = newY + 17;
+		y = newY;
 		
 		xVel = newXVel;
 		yVel = newYVel;
+		
+		projectileAngle = newAngle;
 		
 		loadData();
 	}
@@ -60,6 +63,14 @@ public class Projectile {
 		
 		newTexture.bind();
 		
+		GL11.glPushMatrix();
+		
+		GL11.glTranslated(x, y, 0);
+		
+		GL11.glRotated(-projectileAngle, 0, 0, 1);
+		
+		GL11.glTranslated(-(x), -(y), 0);
+		
 		GL11.glBegin(GL11.GL_QUADS);
 			
 			GL11.glTexCoord2f(0,0);
@@ -73,6 +84,7 @@ public class Projectile {
     		
     	GL11.glEnd();
     	
+    	GL11.glPopMatrix();
 	}
 
 }
