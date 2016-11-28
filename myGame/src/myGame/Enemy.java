@@ -19,19 +19,19 @@ public class Enemy {
 	double enemyAngle;
 	double desiredAngle;
 	
-	
-	
+	World gameWorld;
+	Character character;
 	private Texture enemySpaceShip;
 	
 	private Texture[] flames = new Texture[4];
 	
 	private Texture pew;
 	
-	public Enemy(float newX, float newY) {
+	public Enemy(World newWorld, Character newCharacter, float newX, float newY) {
+		gameWorld = newWorld;
+		character = newCharacter;
 		x = newX;
 		y = newY;
-		
-	
 		
 		loadData();
 	}
@@ -53,7 +53,7 @@ public class Enemy {
 	}
 	
 	public void update(){
-		desiredAngle = (Math.atan2((x + 11) - (Character.getX() + 11), (y + 11) - (Character.getY() + 17))) * (180 / Math.PI);
+		desiredAngle = Math.toDegrees(Math.atan2((x + 11) - (character.getX() + 11), (y + 11) - (character.getY() + 17)));
 		
 		
 		if(!(enemyAngle < desiredAngle+1 && enemyAngle>desiredAngle-1) ){
@@ -90,8 +90,27 @@ public class Enemy {
 				}
 			}
 		}
-	}	
 	}
+		
+		
+			
+		                
+			
+			for(int j = 0; j < gameWorld.projectiles.size(); j++){
+				
+				for(int i = 0; i < gameWorld.enemies.size(); i++){
+					
+				System.out.println("Projectiles " + gameWorld.projectiles.size() + " : Enemies " + gameWorld.enemies.size());
+				if(gameWorld.projectiles.get(j).x > gameWorld.enemies.get(i).x && gameWorld.projectiles.get(j).x + 1 < gameWorld.enemies.get(i).x + 22 && gameWorld.projectiles.get(j).y > gameWorld.enemies.get(i).y && gameWorld.projectiles.get(j).y + 1 < gameWorld.enemies.get(i).y + 22){
+					gameWorld.enemies.remove(i);
+					
+					
+					
+				}
+			}
+		}
+	}
+
 	
 	public void draw(){
 		drawTexture(enemySpaceShip);
@@ -99,7 +118,7 @@ public class Enemy {
 	
 	public void drawTexture(Texture newTexture){
 		
-newTexture.bind();
+		newTexture.bind();
 		
 		GL11.glPushMatrix();
 		

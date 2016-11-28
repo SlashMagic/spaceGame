@@ -19,10 +19,12 @@ public class World {
 	 
 	 List<Enemy> enemies = new ArrayList<Enemy>();
 	 
+	 World gameWorld;
+	 
 	 float enemyX = 0;
 	 float enemyY = 0;
 	 
-	 
+	 int enemiesToSpawn = 0;
 	 
 	public World() {
 		
@@ -42,15 +44,17 @@ public class World {
 		}
 		
 	}
+	
+
 	 
-	public void createEnemy(){
+	public void createEnemy(Character newCharacter){
 		
 		Random rnd = new Random();
 		
-		enemyX = rnd.nextInt(Display.getWidth() - 50) + 20;
-		enemyY = rnd.nextInt(Display.getHeight() - 50) + 20;
+		enemyX = rnd.nextInt(750) + 20;
+		enemyY = rnd.nextInt(550) + 20;
 		
-		enemies.add(new Enemy(enemyX, enemyY));
+		enemies.add(new Enemy(this, newCharacter , enemyX, enemyY));
 	}
 	 
 	 public  void createProjectile(Projectile newProjectile, float newX, float newY, double newXVel, double newYVel, double newAngle){
@@ -63,29 +67,26 @@ public class World {
 		drawTexture(textureBackground, 0, 0);
 		
 		for(int i = 0; i < projectiles.size(); i++){
-			 	
+			 
 				projectiles.get(i).update(delta);
 				projectiles.get(i).draw();
+				if(projectiles.get(i).x < 0 || projectiles.get(i).y < 0 || projectiles.get(i).x > Display.getWidth() || projectiles.get(i).y > Display.getHeight()){
+					projectiles.remove(i);
+				}
 		 }
 		
 		for(int i = 0; i < enemies.size(); i++){
 			
-			enemies.get(i).update();
-			enemies.get(i).draw();                  
+				enemies.get(i).update();
+			if(enemies.size() != 0){
+				enemies.get(i).draw();                  
+			}
 			
-			for(int j = 0; j < projectiles.size(); j++){
-				
-				if(projectiles.get(i).x > enemies.get(i).x && projectiles.get(i).x + 5 < enemies.get(i).x + 22 && projectiles.get(i).y > enemies.get(i).y && projectiles.get(i).y + 6 < enemies.get(i).y + 22){
-					
-					projectiles.remove(i);
-					enemies.remove(i);
-					
-				}
 			}
 			
 			
 		}
-	}
+	
 	
 	 void drawTexture(Texture newTexture, int newX, int newY){
 		

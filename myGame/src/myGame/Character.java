@@ -1,6 +1,7 @@
 package myGame;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -12,8 +13,8 @@ import org.newdawn.slick.util.ResourceLoader;
 
 public class Character{
 	
-	static float x = 0;
-	static float y = 0;
+	float x = 0;
+	float y = 0;
 	
 	float xVel = 0;
 	float yVel = 0;
@@ -33,14 +34,18 @@ public class Character{
 	 
 	private  Texture textureSpaceShip;
 	
+	Random rnd = new Random();
+	
+	int enemiesToSpawn = 0;
+	
 	private Texture[] flames = new Texture[4];
 	private Texture pew;
 	
-	 static float getX(){
+	float getX(){
 		return x;
 	}
 	
-	 static float getY(){
+	float getY(){
 		return y;
 	}
 	
@@ -177,16 +182,16 @@ public class Character{
 			
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_A) && totalVelocity < 1){
+		/*if(Keyboard.isKeyDown(Keyboard.KEY_A) && totalVelocity < 1){
 			yVel += (float)((delta*speed) * ((Math.cos((currentAngle + 90) * (Math.PI / 180)))));
 			xVel += (float)((delta*speed) * ((Math.sin((currentAngle + 90) * (Math.PI / 180)))));
 			
-		}
+		}*/
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_D) && totalVelocity < 1){
+		/*if(Keyboard.isKeyDown(Keyboard.KEY_D) && totalVelocity < 1){
 			yVel -= (float)((delta*speed) * ((Math.cos((currentAngle + 90) * (Math.PI / 180)))));
 			xVel -= (float)((delta*speed) * ((Math.sin((currentAngle + 90) * (Math.PI / 180)))));
-		}
+		}*/
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_W) && totalVelocity < 1){
 			yVel += (float)(1.5*(delta*speed) * ((Math.cos((currentAngle) * (Math.PI / 180)))));
@@ -194,7 +199,7 @@ public class Character{
 			
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_S) && totalVelocity < 1){
+		if(Keyboard.isKeyDown(Keyboard.KEY_S) && totalVelocity >= 0){
 			yVel -= (float)((delta*speed) * ((Math.cos((currentAngle) * (Math.PI / 180)))));
 			xVel -= (float)((delta*speed) * ((Math.sin((currentAngle) * (Math.PI / 180)))));
 		}
@@ -226,7 +231,7 @@ public class Character{
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && attackTimer == 0){
 			
-			gameWorld.createEnemy();
+			
 			
 			attackTimer = 72;
 			
@@ -294,6 +299,14 @@ public class Character{
 			
 			gameWorld.createProjectile(new Projectile(newX, newY, newXVel, newYVel, currentAngle) , newX, newY, newXVel, newYVel, currentAngle);
 			
+		}
+		
+		if(gameWorld.enemies.size() == 0){
+			enemiesToSpawn = rnd.nextInt(4) + 1;
+			for(int i = 0; i < enemiesToSpawn; i++){
+				gameWorld.createEnemy(this);
+		}
+		
 		}
 		
 		if(x < 10 ){
