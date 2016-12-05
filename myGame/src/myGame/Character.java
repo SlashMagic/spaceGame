@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
@@ -13,20 +11,28 @@ import org.newdawn.slick.util.ResourceLoader;
 
 public class Character{
 	
+	int forward = Keyboard.KEY_W;
+	int backward = Keyboard.KEY_S;
+	int rotateLeft = Keyboard.KEY_Q;
+	int rotateRight = Keyboard.KEY_E;
+	int shoot = Keyboard.KEY_SPACE;
+	
 	float x = 0;
 	float y = 0;
 	
+	int health = 200;
+	
 	float xVel = 0;
 	float yVel = 0;
+	
+	float rotational_speed = 0.1f;
 	
 	int index = 0;
 	
 	int attackTimer = 0;
 	
-	float speed = 0.001f;
-	float maxSpeed = 0.1f;
-	
-	double desiredAngle = 0;
+	float speed = 0.000f;
+
 	double currentAngle = 180;
 	double shipAngle = 180;
 	double velocityAngle = 0;
@@ -86,53 +92,25 @@ public class Character{
 	
 	public void update(int delta){
 		
-		desiredAngle = Math.atan2(Mouse.getX() - (x + (textureSpaceShip.getWidth() / 2)), (Display.getHeight() - Mouse.getY()) - (y + (textureSpaceShip.getTextureHeight() / 2)));
+		for(int i = 0; i < gameWorld.enemyProjectiles.size(); i++){
+			if(gameWorld.enemyProjectiles.get(i).x > x && gameWorld.enemyProjectiles.get(i).x < x + 22 && gameWorld.enemyProjectiles.get(i).y > y && gameWorld.enemyProjectiles.get(i).y < y + 32){
+				health -= 10;
+				
+				gameWorld.enemyProjectiles.remove(i);
+				
+			}
+			
+		}
 		
-		desiredAngle = desiredAngle * (180/Math.PI);
+		if(speed <= 0.075){
+			rotational_speed = 0.175f;
+		}
+		
+		if(speed > 0.075){
+			rotational_speed = 0.175f;
+		}
 		
 		currentAngle = shipAngle;
-		
-		float rotational_speed = 0.1f;
-		
-	
-		
-		
-		/*if(!(currentAngle < desiredAngle+1 && currentAngle>desiredAngle-1) ){
-			if(desiredAngle > currentAngle){
-				if(Math.abs(desiredAngle - currentAngle) < 180){
-					shipAngle += rotational_speed;
-					if(shipAngle > 180){
-						shipAngle = -180;
-					}
-					
-				}
-			
-				else{
-					shipAngle -= rotational_speed;
-					if(shipAngle < -180){
-						shipAngle = 180;
-					}
-
-				}
-		}
-				
-			
-			else{
-				if(Math.abs(currentAngle - desiredAngle) < 180){
-					shipAngle -= rotational_speed;
-					if(shipAngle < -180){
-						shipAngle = 180;
-					}
-				}
-				else{
-					shipAngle += rotational_speed;
-					if(shipAngle > 180){
-						shipAngle = -180;
-					}
-				}
-			}
-		}	*/
-		
 		
 		if(attackTimer != 0){
 			attackTimer--;
@@ -150,98 +128,67 @@ public class Character{
 		
 		totalVelocity = Math.sqrt(Math.pow((xVel * Math.cos(velocityAngle)), 2) +  Math.pow((yVel * Math.sin(velocityAngle)), 2));
 		
-		
-		
 		if(totalVelocity > 1){
 			if(xVel > 0){
+				
 				xVel -= 0.0001;
 			}
 			if(xVel < 0){
+				
 				xVel += 0.0001;
 			}
 			if(yVel > 0){
+				
 				yVel -= 0.0001;
 			}
 			if(yVel < 0){
+				
 				yVel += 0.0001;
 			}
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
+		if(Keyboard.isKeyDown(rotateLeft)){
+			
 			shipAngle += delta*rotational_speed;
+			
 			if(currentAngle > 180){
+				
 				shipAngle = -180;
 			}
 		}
 
-		if(Keyboard.isKeyDown(Keyboard.KEY_E)){
-			shipAngle -= delta*rotational_speed;
-			if(currentAngle < -180){
+		if(Keyboard.isKeyDown(rotateRight)){
+			
+		shipAngle -= delta*rotational_speed;
+		
+		if(currentAngle < -180){
+			
 				shipAngle = 180;
-			}
+				}
+		}
+		
+		if(Keyboard.isKeyDown(forward) && speed <= 0.175){
+			
+			speed += 0.002;
 			
 		}
 		
-		/*if(Keyboard.isKeyDown(Keyboard.KEY_A) && totalVelocity < 1){
-			yVel += (float)((delta*speed) * ((Math.cos((currentAngle + 90) * (Math.PI / 180)))));
-			xVel += (float)((delta*speed) * ((Math.sin((currentAngle + 90) * (Math.PI / 180)))));
+		if(Keyboard.isKeyDown(backward) && speed > 0){
 			
-		}*/
-		
-		/*if(Keyboard.isKeyDown(Keyboard.KEY_D) && totalVelocity < 1){
-			yVel -= (float)((delta*speed) * ((Math.cos((currentAngle + 90) * (Math.PI / 180)))));
-			xVel -= (float)((delta*speed) * ((Math.sin((currentAngle + 90) * (Math.PI / 180)))));
-		}*/
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_W) && totalVelocity < 1){
-			yVel += (float)(1.5*(delta*speed) * ((Math.cos((currentAngle) * (Math.PI / 180)))));
-			xVel += (float)(1.5*(delta*speed) * ((Math.sin((currentAngle) * (Math.PI / 180)))));
+			speed -= 0.002;
 			
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_S) && totalVelocity >= 0){
-			yVel -= (float)((delta*speed) * ((Math.cos((currentAngle) * (Math.PI / 180)))));
-			xVel -= (float)((delta*speed) * ((Math.sin((currentAngle) * (Math.PI / 180)))));
-		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-			
-			if(xVel > 0){
-				xVel -= (float)delta*speed;
-			}
-			
-			if(xVel < 0){
-				xVel += (float)delta*speed;
-			}
-			
-			if(yVel > 0){
-				yVel -= (float)delta*speed;
-				
-			}
-			if(yVel < 0){
-				yVel += (float)delta*speed;
-			}
-			
-			if(totalVelocity < 0.01){
-				yVel = 0;
-				xVel = 0;
-			}
-			
-		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && attackTimer == 0){
-			
-			
-			
+		if(Keyboard.isKeyDown(shoot) && attackTimer == 0){
+
 			attackTimer = 72;
 			
 			float newX = 0;
 			float newY = 0;
-			
-			
-			
+
 			switch(index){
 			case 0:
+				
 				if(currentAngle > 135 || currentAngle < -135){
 					newX = x + 4;
 					newY = y + 20;
@@ -259,12 +206,12 @@ public class Character{
 					newY = y + 24;
 				}
 				
-				
 				index = 1;
 				
 				break;
 				
 			case 1:
+				
 				if(currentAngle > 135 || currentAngle < -135){
 					newX = x + 23;
 					newY = y + 20;
@@ -289,20 +236,19 @@ public class Character{
 			double newXVel = 0;
 			double newYVel = 0;
 			
-			double velocity = 1.5f;
-			
-			
+			double velocity = 2f;
 			
 			newXVel =  (velocity * Math.cos((currentAngle - 90) * (Math.PI / 180)));
 			newYVel =  (velocity * Math.sin((currentAngle - 90) * (Math.PI / 180)));
 			
-			
-			gameWorld.createProjectile(new Projectile(newX, newY, newXVel, newYVel, currentAngle) , newX, newY, newXVel, newYVel, currentAngle);
+			gameWorld.createProjectile(new Projectile(0, newX, newY, newXVel, newYVel, currentAngle) , newX, newY, newXVel, newYVel, currentAngle);
 			
 		}
 		
 		if(gameWorld.enemies.size() == 0){
-			enemiesToSpawn = rnd.nextInt(4) + 1;
+			enemiesToSpawn = rnd.nextInt(6) + 3;
+			
+			
 			for(int i = 0; i < enemiesToSpawn; i++){
 				gameWorld.createEnemy(this);
 		}
@@ -329,51 +275,50 @@ public class Character{
 			y = 600 - 34;
 		}
 		
+		yVel = (float)(1.5*(delta*speed) * ((Math.cos((currentAngle) * (Math.PI / 180)))));
+		xVel = (float)(1.5*(delta*speed) * ((Math.sin((currentAngle) * (Math.PI / 180)))));
+		
 		x += xVel;
 		y += yVel;
 		
 	}
 	
 	public  void draw() {
-		drawTexture(textureSpaceShip);
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_W)){
+
+		if(Keyboard.isKeyDown(forward)){
 			drawTexture(flames[0], x + 11, y + 30);
 			drawTexture(flames[0], x + 6, y + 30);
 		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_A)){
-			drawTexture(flames[3],x + 14, y + 11);
+
+		if(Keyboard.isKeyDown(backward) && speed > 0){
+			drawTexture(flames[2], x + 1.8f, y + 17);
+			drawTexture(flames[2], x + 15.2f, y + 17);
 		}
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_S)){
-			drawTexture(flames[2], x + 1.8f, y + 16);
-			drawTexture(flames[2], x + 15.2f, y + 16);
-		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-			drawTexture(flames[1], x + 2.5f, y + 11);
-		}
-		
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-			if(xVel > 0.1){
-				drawTexture(flames[3], x + 14, y + 11);
-			}
-			if(xVel < -0.1){
-				drawTexture(flames[1], x + 1.5f, y + 11);
-			}
-			if(yVel > 0.1){
+		if(Keyboard.isKeyDown(rotateLeft)){
+			if(speed > 0){
 				drawTexture(flames[0], x + 11, y + 30);
-				drawTexture(flames[0], x + 6,y + 30);
+				drawTexture(flames[0], x + 6, y + 30);
+				
 			}
-			if(yVel < -0.1){
-				drawTexture(flames[2], x + 1.8f, y + 16);
-				drawTexture(flames[2], x + 15.2f, y + 16);
+			drawTexture(flames[3], x + 13, y + 12);
+			if(speed < 0){
+				
 			}
-			
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && attackTimer > 62){
+		
+		if(Keyboard.isKeyDown(rotateRight)){
+			if(speed > 0){
+				drawTexture(flames[0], x + 11, y + 30);
+				drawTexture(flames[0], x + 6, y + 30);
+			}
+			drawTexture(flames[1], x + 3, y + 12);
+			if(speed < 0){
+				
+			}
+		}
+		
+		if(Keyboard.isKeyDown(shoot) && attackTimer > 53){
 			if(index == 1){
 				drawTexture(pew, x - 3, y + 14);
 			}
@@ -381,15 +326,14 @@ public class Character{
 				drawTexture(pew, x + 16, y + 15);
 			}
 		}
+		
+		drawTexture(textureSpaceShip);
+		
 	}
 	
 	 void drawTexture(Texture newTexture){
 		
-		
-		
 		newTexture.bind();
-		
-		
 		
 		GL11.glPushMatrix();
 		
@@ -398,10 +342,6 @@ public class Character{
 		GL11.glRotated(-shipAngle + 180, 0, 0, 1);
 		
 		GL11.glTranslated(-(x + 11), -(y + 17), 0);
-		
-	
-		
-		
 		
 		GL11.glBegin(GL11.GL_QUADS);
 			
@@ -416,7 +356,7 @@ public class Character{
     	GL11.glEnd();
     	
     	GL11.glPopMatrix();
-    	 
+    
 	}
 	 
 	void drawTexture(Texture newTexture, float newX, float newY){
@@ -443,7 +383,7 @@ public class Character{
     	GL11.glEnd();
     	
     	GL11.glPopMatrix();
-    	
+   
 	}
-	 
+	
 }

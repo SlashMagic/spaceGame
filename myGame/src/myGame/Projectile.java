@@ -13,6 +13,8 @@ public class Projectile {
 	 float x = -10;
 	 float y = -10;
 	
+	 int type = 0;
+	 
 	 double xVel = 0;
 	 double yVel = 0;
 	
@@ -24,8 +26,8 @@ public class Projectile {
 		return y;
 	}
 	
-	public Projectile(float newX, float newY, double newXVel, double newYVel, double newAngle) {
-		
+	public Projectile(int newType, float newX, float newY, double newXVel, double newYVel, double newAngle) {
+		type = newType;
 		
 		x = newX;
 		y = newY;
@@ -40,9 +42,15 @@ public class Projectile {
 	
 	 void loadData(){
 		try{
-			
-			textureProjectile = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/projectileLaser.png"), GL11.GL_NEAREST);
-			
+			if(type == 0){
+				textureProjectile = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/projectileLaser.png"), GL11.GL_NEAREST);
+			}
+			if(type == 1){
+				textureProjectile = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/projectileBlueLaser.png"), GL11.GL_NEAREST);
+			}
+			else{
+				textureProjectile = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/projectileLaser.png"), GL11.GL_NEAREST);
+			}
 		}
 		catch (IOException e){
 			e.printStackTrace();

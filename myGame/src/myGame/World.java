@@ -17,6 +17,8 @@ public class World {
 	
 	 List<Projectile> projectiles = new ArrayList<Projectile>();
 	 
+	 List<Projectile> enemyProjectiles = new ArrayList<Projectile>();
+	 
 	 List<Enemy> enemies = new ArrayList<Enemy>();
 	 
 	 World gameWorld;
@@ -24,14 +26,19 @@ public class World {
 	 float enemyX = 0;
 	 float enemyY = 0;
 	 
+	 Font newFont;
+	 
+	 int enemyQuad = 0;
+	 
 	 int enemiesToSpawn = 0;
 	 
-	public World() {
-		
+	 boolean mainMenu = true;
+	 
+	public World(Font font) {
+		newFont = font;
 		loadData();
 		
 	}
-	
 	
 	 void loadData(){
 		try{
@@ -45,48 +52,81 @@ public class World {
 		
 	}
 	
-
-	 
 	public void createEnemy(Character newCharacter){
 		
 		Random rnd = new Random();
 		
-		enemyX = rnd.nextInt(750) + 20;
-		enemyY = rnd.nextInt(550) + 20;
+		enemyQuad = rnd.nextInt(4) + 1;
+		if(enemyQuad == 1){
+			enemyX = -40;
+			enemyY = rnd.nextInt(550) + 20;
+		}
+		if(enemyQuad == 2){
+			enemyX = rnd.nextInt(750) + 20;
+			enemyY = -40;
+		}
+		if(enemyQuad == 3){
+			enemyX = 840;
+			enemyY = rnd.nextInt(550) + 20;
+		}
+		if(enemyQuad == 4){
+			enemyX = rnd.nextInt(750) + 20;
+			enemyY = 640;
+		}
 		
 		enemies.add(new Enemy(this, newCharacter , enemyX, enemyY));
 	}
 	 
 	 public  void createProjectile(Projectile newProjectile, float newX, float newY, double newXVel, double newYVel, double newAngle){
 		 	
-			projectiles.add(new Projectile(newX, newY, newXVel, newYVel , newAngle));
+			projectiles.add(new Projectile(0, newX, newY, newXVel, newYVel , newAngle));
 		}
+	 
+	 public void createEnemyProjectile(Projectile newProjectile, float newX, float newY, double newXVel, double newYVel, double newAngle){
+		 
+		 enemyProjectiles.add(new Projectile(1, newX, newY, newXVel, newYVel, newAngle));
+		 
+	 }
 	
-	public  void draw( int delta){
-		
-		drawTexture(textureBackground, 0, 0);
+	public  void update( int delta){
 		
 		for(int i = 0; i < projectiles.size(); i++){
-			 
+
 				projectiles.get(i).update(delta);
+
 				projectiles.get(i).draw();
+				
 				if(projectiles.get(i).x < 0 || projectiles.get(i).y < 0 || projectiles.get(i).x > Display.getWidth() || projectiles.get(i).y > Display.getHeight()){
 					projectiles.remove(i);
 				}
 		 }
 		
-		for(int i = 0; i < enemies.size(); i++){
+		for(int i = 0; i < enemyProjectiles.size(); i++){
 			
-				enemies.get(i).update();
-			if(enemies.size() != 0){
-				enemies.get(i).draw();                  
+			enemyProjectiles.get(i).update(delta);
+			
+			enemyProjectiles.get(i).draw();
+			
+			if(enemyProjectiles.get(i).x < 0 || enemyProjectiles.get(i).x > Display.getWidth() || enemyProjectiles.get(i).y < 0 || enemyProjectiles.get(i).y > Display.getHeight()){
+				enemyProjectiles.remove(i);
 			}
-			
-			}
-			
 			
 		}
+		
+		for(int i = 0; i < enemies.size(); i++){
+			
+			enemies.get(i).update();
+				                  
+		}
+		for(int i = 0; i < enemies.size(); i++){
+			enemies.get(i).draw(); 
+		}
+		
+	}
 	
+	public void draw(){
+		drawTexture(textureBackground, 0, 0);
+	}
 	
 	 void drawTexture(Texture newTexture, int newX, int newY){
 		

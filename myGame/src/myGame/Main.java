@@ -1,16 +1,12 @@
 package myGame;
 
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
-
 import org.newdawn.slick.Color;
-
-
 
 public class Main {
 	
@@ -45,8 +41,6 @@ public class Main {
 		return newIndex;
 	}
 	
-	
-	
 	public void start(){
 		
 		try{
@@ -59,11 +53,10 @@ public class Main {
 			if(!fullscreen){
 				Display.setDisplayMode(new DisplayMode(width, height));
 			}
-			
+		
 			Display.create();
 			Keyboard.create();
-			
-			
+		
 		} catch (LWJGLException e){
 			e.printStackTrace();
 			System.exit(0);
@@ -79,8 +72,6 @@ public class Main {
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);                
 	    GL11.glClearDepth(1);                                       
 	 
-	    
-	    
 	    GL11.glEnable(GL11.GL_BLEND);
 	    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			 
@@ -89,11 +80,13 @@ public class Main {
 		GL11.glOrtho(0, width, height, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		
-		World gameWorld = new World();
+		Font newFont = new Font();
+		
+		World gameWorld = new World(newFont);
 		
 		Character newCharacter = new Character(gameWorld, 100, 100);
 		
-		
+		UserInterface newUI = new UserInterface(newFont, newCharacter, gameWorld);
 		
 		while(!Display.isCloseRequested() && !exit){
 			
@@ -102,22 +95,30 @@ public class Main {
 			Keyboard.poll();
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
-				exit = true;
+				gameWorld.mainMenu = true;
 			}
 			
 			int delta = getDelta();
-			
-			
-			
+		
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			
 			Color.white.bind();
 			
-			newCharacter.update(delta);
+			gameWorld.draw();
 			
-			gameWorld.draw(delta);
+			newUI.update();
 			
-			newCharacter.draw();
+			if(!gameWorld.mainMenu){
+				gameWorld.update(delta);
+				if(newCharacter.health > 0){
+					newCharacter.update(delta);
+					newCharacter.draw();
+				}
+				
+				newFont.drawString("0123456789 ^abcdefghijklmnopqrstuvwxyz^ +-*%=.!?:;[]|", 20, 300, 10);
+				
+				newFont.drawString("^Dan Sux^ -Ryan Lee, 2016." , 20, 350, 8);
+			}
 			
 			Display.update();
 			
@@ -149,13 +150,10 @@ public class Main {
 		}
 		fps++;
 	}
-	
 
-	
 	public static void main(String[] args){
 		Main myMain = new Main();
 		myMain.start();
 	}
-	
 	
 }
