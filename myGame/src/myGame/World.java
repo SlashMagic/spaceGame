@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
-
+		
 public class World {
 
 	 Texture textureBackground;
@@ -32,7 +32,13 @@ public class World {
 	 
 	 int enemiesToSpawn = 0;
 	 
+	 int score = 0;
+	 
 	 boolean mainMenu = true;
+	 
+	 boolean tutorial = false;
+	 
+	 boolean options = false;
 	 
 	public World(Font font) {
 		newFont = font;
@@ -91,9 +97,9 @@ public class World {
 	public  void update( int delta){
 		
 		for(int i = 0; i < projectiles.size(); i++){
-
+				
 				projectiles.get(i).update(delta);
-
+				
 				projectiles.get(i).draw();
 				
 				if(projectiles.get(i).x < 0 || projectiles.get(i).y < 0 || projectiles.get(i).x > Display.getWidth() || projectiles.get(i).y > Display.getHeight()){

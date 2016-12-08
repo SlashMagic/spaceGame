@@ -1,6 +1,8 @@
 package myGame;
 
 import java.io.IOException;
+import java.util.Random;
+
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
@@ -17,6 +19,8 @@ public class Enemy {
 	float speed = 0.5f;
 	
 	int index = 0;
+	
+	int type = 0;
 	
 	int attackTimer = 288;
 	
@@ -37,6 +41,8 @@ public class Enemy {
 	private Texture pew;
 	
 	public Enemy(World newWorld, Character newCharacter, float newX, float newY) {
+		Random rnd = new Random();
+		type = rnd.nextInt(1);
 		gameWorld = newWorld;
 		character = newCharacter;
 		x = newX;
@@ -50,7 +56,7 @@ public class Enemy {
 	void loadData(){
 		try{
 			
-			enemySpaceShip = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/enemyShip.png"), GL11.GL_NEAREST);
+			enemySpaceShip = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/enemyShip_0.png"), GL11.GL_NEAREST);
 			flames[0] = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/flames.png"), GL11.GL_NEAREST);
 			flames[1] = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/flames1.png"), GL11.GL_NEAREST);
 			flames[2] = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/flames2.png"), GL11.GL_NEAREST);
@@ -160,9 +166,9 @@ public class Enemy {
 			}else{
 			
 				if(attackTimer == 0){
-				
+					
 					attackTimer = 144;
-				
+					
 					float newProjectileX = 0;
 					float newProjectileY = 0;
 					
@@ -245,7 +251,7 @@ public class Enemy {
 				if(gameWorld.projectiles.get(j).x > x && gameWorld.projectiles.get(j).x + 1 < x + 22 && gameWorld.projectiles.get(j).y > y && gameWorld.projectiles.get(j).y + 1 < y + 22){
 					gameWorld.enemies.remove(this);
 					gameWorld.projectiles.remove(j);
-					
+					gameWorld.score += 10;
 				}
 			
 		}
@@ -256,9 +262,7 @@ public class Enemy {
 	}
 
 	public void draw(){
-		
-		
-		
+	
 		if(attackTimer > 120){
 			if(index == 1){
 				drawTexture(pew, x - 1, y - 2);

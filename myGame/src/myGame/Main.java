@@ -96,6 +96,8 @@ public class Main {
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
 				gameWorld.mainMenu = true;
+				gameWorld.tutorial = false;
+				gameWorld.options = false;
 			}
 			
 			int delta = getDelta();
@@ -108,16 +110,13 @@ public class Main {
 			
 			newUI.update();
 			
-			if(!gameWorld.mainMenu){
+			if(!gameWorld.mainMenu && !gameWorld.tutorial && !gameWorld.options){
 				gameWorld.update(delta);
 				if(newCharacter.health > 0){
 					newCharacter.update(delta);
 					newCharacter.draw();
 				}
 				
-				newFont.drawString("0123456789 ^abcdefghijklmnopqrstuvwxyz^ +-*%=.!?:;[]|", 20, 300, 10);
-				
-				newFont.drawString("^Dan Sux^ -Ryan Lee, 2016." , 20, 350, 8);
 			}
 			
 			Display.update();
