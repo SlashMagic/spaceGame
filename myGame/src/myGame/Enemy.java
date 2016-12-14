@@ -1,7 +1,11 @@
 package myGame;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
@@ -21,7 +25,7 @@ public class Enemy {
 	int index = 0;
 	
 	int type = 0;
-	
+
 	int attackTimer = 288;
 	
 	double enemyAngle;
@@ -34,6 +38,10 @@ public class Enemy {
 	
 	World gameWorld;
 	Character character;
+	
+	File shoot;
+	File hitSound;
+	
 	private Texture enemySpaceShip;
 	
 	private Texture[] flames = new Texture[4];
@@ -55,7 +63,8 @@ public class Enemy {
 	
 	void loadData(){
 		try{
-			
+			hitSound = new File("res/sound/Hit.wav");
+			shoot = new File("res/sound/Laser_Shoot.wav");
 			enemySpaceShip = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/enemyShip_0.png"), GL11.GL_NEAREST);
 			flames[0] = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/flames.png"), GL11.GL_NEAREST);
 			flames[1] = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/flames1.png"), GL11.GL_NEAREST);
@@ -68,7 +77,7 @@ public class Enemy {
 		}
 	}
 	
-	public void update(){
+	public void update(int delta){
 		desiredAngle = Math.toDegrees(Math.atan2((x + 11) - (character.getX() + 11), (y + 11) - (character.getY() + 17)));
 		
 		/*if(gameWorld.enemies.size() != 1){
@@ -133,7 +142,7 @@ public class Enemy {
 			if(!(enemyAngle < desiredAngle+ 1 && enemyAngle>desiredAngle- 1) ){
 				if(desiredAngle > enemyAngle){
 					if(Math.abs(desiredAngle - enemyAngle) < 180){
-						enemyAngle += 0.5;
+						enemyAngle += 0.5 * delta * 0.15;
 						if(enemyAngle > 180){
 							enemyAngle = -180;
 						}
@@ -141,7 +150,7 @@ public class Enemy {
 					}
 					
 					else{
-						enemyAngle -= 0.5;
+						enemyAngle -= 0.5 * delta * 0.15;
 						if(enemyAngle < -180){
 							enemyAngle = 180;
 						}
@@ -150,13 +159,13 @@ public class Enemy {
 				
 				else{
 					if(Math.abs(enemyAngle - desiredAngle) < 180){
-						enemyAngle -= 0.5;
+						enemyAngle -= 0.5 * delta * 0.15;
 						if(enemyAngle < -180){
 							enemyAngle = 180;
 						}
 					}
 					else{
-						enemyAngle += 0.5;
+						enemyAngle += 0.5 * delta * 0.15;
 						if(enemyAngle > 180){
 							enemyAngle = -180;
 						}
@@ -230,7 +239,8 @@ public class Enemy {
 
 					newProjectileXVel =  -(velocity * Math.cos((enemyAngle - 90) * (Math.PI / 180)));
 					newProjectileYVel =  -(velocity * Math.sin((enemyAngle - 90) * (Math.PI / 180)));
-				
+					
+					playSound(shoot);
 				
 					gameWorld.createEnemyProjectile(new Projectile(1, newProjectileX, newProjectileY, newProjectileXVel, newProjectileYVel, enemyAngle) , newProjectileX, newProjectileY, newProjectileXVel, newProjectileYVel, enemyAngle);
 				}
@@ -243,13 +253,14 @@ public class Enemy {
 		yVel = -(float)((speed) * ((Math.cos((enemyAngle) * (Math.PI / 180)))));
 		xVel = -(float)((speed) * ((Math.sin((enemyAngle) * (Math.PI / 180)))));
 			
-		x += xVel;
-		y += yVel;                
+		x += xVel * delta * 0.15;
+		y += yVel * delta * 0.15;                
 		
 			for(int j = 0; j < gameWorld.projectiles.size(); j++){
 				
 				if(gameWorld.projectiles.get(j).x > x && gameWorld.projectiles.get(j).x + 1 < x + 22 && gameWorld.projectiles.get(j).y > y && gameWorld.projectiles.get(j).y + 1 < y + 22){
 					gameWorld.enemies.remove(this);
+					playSound(hitSound);
 					gameWorld.projectiles.remove(j);
 					gameWorld.score += 10;
 				}
@@ -259,6 +270,19 @@ public class Enemy {
 				attackTimer -= 1;
 			}
 			
+	}
+	
+	public void playSound(File sound){
+		
+		try{
+			Clip clip = AudioSystem.getClip();
+			clip.open(AudioSystem.getAudioInputStream(sound));
+			clip.start();
+		}
+		catch(Exception e){
+			
+		}
+		
 	}
 
 	public void draw(){

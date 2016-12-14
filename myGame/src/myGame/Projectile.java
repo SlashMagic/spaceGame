@@ -14,7 +14,7 @@ public class Projectile {
 	 float y = -10;
 	
 	 int type = 0;
-	 
+	
 	 double xVel = 0;
 	 double yVel = 0;
 	
@@ -58,8 +58,8 @@ public class Projectile {
 	}
 	
 	public  void update(int delta){
-		x += xVel;
-		y -= yVel;
+		x += xVel * delta * 0.15;
+		y -= yVel * delta * 0.15;
 	}
 	
 	public  void draw() {

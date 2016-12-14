@@ -21,8 +21,6 @@ public class World {
 	 
 	 List<Enemy> enemies = new ArrayList<Enemy>();
 	 
-	 World gameWorld;
-	 
 	 float enemyX = 0;
 	 float enemyY = 0;
 	 
@@ -33,7 +31,7 @@ public class World {
 	 int enemiesToSpawn = 0;
 	 
 	 int score = 0;
-	 
+
 	 boolean mainMenu = true;
 	 
 	 boolean tutorial = false;
@@ -42,6 +40,7 @@ public class World {
 	 
 	public World(Font font) {
 		newFont = font;
+		
 		loadData();
 		
 	}
@@ -121,7 +120,7 @@ public class World {
 		
 		for(int i = 0; i < enemies.size(); i++){
 			
-			enemies.get(i).update();
+			enemies.get(i).update(delta);
 				                  
 		}
 		for(int i = 0; i < enemies.size(); i++){

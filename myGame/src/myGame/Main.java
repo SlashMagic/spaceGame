@@ -1,5 +1,7 @@
 package myGame;
 
+import java.io.File;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -56,7 +58,9 @@ public class Main {
 		
 			Display.create();
 			Keyboard.create();
-		
+			
+			
+			
 		} catch (LWJGLException e){
 			e.printStackTrace();
 			System.exit(0);
@@ -98,6 +102,7 @@ public class Main {
 				gameWorld.mainMenu = true;
 				gameWorld.tutorial = false;
 				gameWorld.options = false;
+				
 			}
 			
 			int delta = getDelta();
@@ -116,6 +121,7 @@ public class Main {
 					newCharacter.update(delta);
 					newCharacter.draw();
 				}
+				
 				
 			}
 			
