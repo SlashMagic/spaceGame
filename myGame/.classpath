@@ -2,14 +2,14 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Users/Ryan/Desktop/lib/Slick_Util/lib/slick-util.jar" sourcepath="C:/Users/Ryan/Desktop/lib/Slick_Util/lib/slick-util-src.zip">
+	<classpathentry kind="lib" path="/home/danwardvs/javalib/jar/slick-util.jar" sourcepath="C:/Users/Ryan/Desktop/lib/Slick_Util/lib/slick-util-src.zip">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Ryan/Desktop/lib/Slick_Util/lib"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/danwardvs/javalib/native/linux"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Ryan/Desktop/lib/LWJGL 2.9.3/lwjgl-2.9.3/jar/lwjgl.jar">
+	<classpathentry kind="lib" path="/home/danwardvs/javalib/jar/lwjgl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Ryan/Desktop/lib/LWJGL 2.9.3/lwjgl-2.9.3/native/windows"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/danwardvs/javalib/native/linux"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

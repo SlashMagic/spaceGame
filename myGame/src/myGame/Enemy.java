@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
@@ -181,7 +184,6 @@ public class Enemy {
 					float newProjectileX = 0;
 					float newProjectileY = 0;
 					
-					System.out.println(enemyAngle);
 					
 					switch(index){
 					case 0:
@@ -275,15 +277,20 @@ public class Enemy {
 	public void playSound(File sound){
 		
 		try{
-			Clip clip = AudioSystem.getClip();
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(sound);
+			
+			AudioFormat format = audioIn.getFormat();
+			DataLine.Info info = new DataLine.Info(Clip.class, format);
+			Clip clip = (Clip)AudioSystem.getLine(info);
 			clip.open(AudioSystem.getAudioInputStream(sound));
 			clip.start();
 		}
 		catch(Exception e){
-			
+			System.out.println(e);
 		}
 		
 	}
+	
 
 	public void draw(){
 	

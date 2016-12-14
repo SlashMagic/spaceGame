@@ -4,21 +4,25 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
+import org.omg.CORBA.SystemException;
 
 public class Character{
 	
 	int forward = Keyboard.KEY_W;
 	int backward = Keyboard.KEY_S;
-	int rotateLeft = Keyboard.KEY_Q;
-	int rotateRight = Keyboard.KEY_E;
+	int rotateLeft = Keyboard.KEY_A;
+	int rotateRight = Keyboard.KEY_D;
 	int shoot = Keyboard.KEY_SPACE;
 	
 	float x = 0;
@@ -48,6 +52,7 @@ public class Character{
 	
 	Random rnd = new Random();
 	
+	
 	int enemiesToSpawn = 0;
 	
 	private Texture[] flames = new Texture[4];
@@ -57,6 +62,8 @@ public class Character{
 	File engineSound;
 	File hitSound;
 	File deathSound;
+	
+	
 	
 	float getX(){
 		return x;
@@ -101,10 +108,13 @@ public class Character{
 		}
 		catch (IOException e){
 			e.printStackTrace();
+			
 		}
 	}
 	
 	public void update(int delta){
+		
+		
 		
 		for(int i = 0; i < gameWorld.enemyProjectiles.size(); i++){
 			if(gameWorld.enemyProjectiles.get(i).x > x && gameWorld.enemyProjectiles.get(i).x < x + 22 && gameWorld.enemyProjectiles.get(i).y > y && gameWorld.enemyProjectiles.get(i).y < y + 32){
@@ -312,12 +322,16 @@ public class Character{
 	public void playSound(File sound){
 		
 		try{
-			Clip clip = AudioSystem.getClip();
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(sound);
+			
+			AudioFormat format = audioIn.getFormat();
+			DataLine.Info info = new DataLine.Info(Clip.class, format);
+			Clip clip = (Clip)AudioSystem.getLine(info);
 			clip.open(AudioSystem.getAudioInputStream(sound));
 			clip.start();
 		}
 		catch(Exception e){
-			
+			System.out.println(e);
 		}
 		
 	}

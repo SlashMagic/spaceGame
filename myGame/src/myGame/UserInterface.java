@@ -184,7 +184,7 @@ public class UserInterface {
 		
 		newFont.drawString("use ^w^ and ^s^ to increase and decrease your speed.", 100, 140, 7);
 		
-		newFont.drawString("use ^q^ and ^e^ to turn your ship left and right.", 100, 160, 7);
+		newFont.drawString("use ^A^ and ^D^ to turn your ship left and right.", 100, 160, 7);
 		
 		newFont.drawString("These are enemies, they will try to shoot you.", 130, 190, 7);
 		drawTexture(enemyShip, 100, 187, 40, 44);
