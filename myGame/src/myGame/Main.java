@@ -13,7 +13,7 @@ public class Main {
 	int width = 960;
 	int height = 540;
 	
-	boolean fullscreen = true;
+	boolean fullscreen = false;
 	
 	long lastFPS;
 	
@@ -85,6 +85,7 @@ public class Main {
 		Display.setVSyncEnabled(true);
 		
 		Font newFont = new Font();
+		MouseHandler gameMouse = new MouseHandler();
 		
 		World gameWorld = new World(newFont);
 		
@@ -104,7 +105,10 @@ public class Main {
 				gameWorld.options = false;
 				
 			}
-			
+			if(Keyboard.isKeyDown(Keyboard.KEY_E)){
+				exit = true;
+				
+			}
 			int delta = getDelta();
 		
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -121,9 +125,9 @@ public class Main {
 					newCharacter.update(delta);
 					newCharacter.draw();
 				}
-				
-				
 			}
+			
+			gameMouse.update();
 			
 			Display.update();
 			

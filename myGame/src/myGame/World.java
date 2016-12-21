@@ -40,9 +40,11 @@ public class World {
 	 
 	 boolean options = false;
 	 
+	
+	 
 	public World(Font font) {
-		newFont = font;
 		
+		newFont = font;
 		loadData();
 		
 	}
@@ -108,6 +110,8 @@ public class World {
 	
 	public  void update( int delta){
 		
+		
+		
 		for(int i = 0; i < projectiles.size(); i++){
 				
 				projectiles.get(i).update(delta);
@@ -154,6 +158,10 @@ public class World {
 		for(int i = 0; i < enemies_3.size(); i++){
 			enemies_3.get(i).draw(); 
 		}
+		
+		
+		
+		
 	}
 	
 	public void draw(){

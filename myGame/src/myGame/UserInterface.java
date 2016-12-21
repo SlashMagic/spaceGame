@@ -42,12 +42,12 @@ public class UserInterface {
 		newFont = font;
 		gameWorld = newWorld;
 		
-		Mouse.setGrabbed(true);
 		
 		loadData();
 	}
 	
 	public void loadData(){
+		
 		try{
 			healthTexture = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/UI/healthBar.png"), GL11.GL_NEAREST);
 			button = TextureLoader.getTexture("png", ResourceLoader.getResourceAsStream("res/UI/button.png"), GL11.GL_NEAREST);
@@ -70,17 +70,17 @@ public class UserInterface {
 		}
 		if(gameWorld.mainMenu){
 			drawMainMenu();
-			drawMouse();
+			
 		}
 		
 		if(gameWorld.tutorial){
 			drawTutorial();
-			drawMouse();
+			
 		}
 		
 		if(gameWorld.options){
 			drawOptions();
-			drawMouse();
+			
 		}
 	}
 	
@@ -91,31 +91,6 @@ public class UserInterface {
 		newFont.drawString("Health", 10, 10, 6);
 		drawTexture(button, 696, 8, 200, 48);
 		newFont.drawString("Score:" + String.valueOf(gameWorld.score), 696, 8, 7);
-	}
-	
-	public void drawMouse(){
-		
-		mouseXStep = Mouse.getDX() * 0.3f;
-		mouseYStep = Mouse.getDY() * 0.3f;
-		
-		mouseX += mouseXStep;
-		mouseY += -mouseYStep;
-		
-		if(mouseX < 0){
-			mouseX = 0;
-		}
-		if(mouseY < 0){
-			mouseY = 0;
-		}
-		if(mouseX > 803){
-			mouseX = 803;
-		}
-		if(mouseY > 603){
-			mouseY = 603;
-		}
-		
-		drawTexture(mouseCursor, mouseX, mouseY, 12, 12);
-		
 	}
 	
 	public void drawMainMenu(){
