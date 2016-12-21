@@ -12,14 +12,16 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 		
 public class World {
-
+	
 	 Texture textureBackground;
 	
 	 List<Projectile> projectiles = new ArrayList<Projectile>();
 	 
 	 List<Projectile> enemyProjectiles = new ArrayList<Projectile>();
 	 
-	 List<Enemy> enemies = new ArrayList<Enemy>();
+	 List<Enemy_1> enemies_1 = new ArrayList<Enemy_1>();
+	 List<Enemy_2> enemies_2 = new ArrayList<Enemy_2>();
+	 List<Enemy_3> enemies_3 = new ArrayList<Enemy_3>();
 	 
 	 float enemyX = 0;
 	 float enemyY = 0;
@@ -59,6 +61,8 @@ public class World {
 	
 	public void createEnemy(Character newCharacter){
 		
+		int type;
+		
 		Random rnd = new Random();
 		
 		enemyQuad = rnd.nextInt(4) + 1;
@@ -71,15 +75,24 @@ public class World {
 			enemyY = -40;
 		}
 		if(enemyQuad == 3){
-			enemyX = 840;
-			enemyY = rnd.nextInt(550) + 20;
+			enemyX = 1000;
+			enemyY = rnd.nextInt(520) + 20;
 		}
 		if(enemyQuad == 4){
-			enemyX = rnd.nextInt(750) + 20;
-			enemyY = 640;
+			enemyX = rnd.nextInt(940) + 20;
+			enemyY = 600;
 		}
 		
-		enemies.add(new Enemy(this, newCharacter , enemyX, enemyY));
+		type = rnd.nextInt(3) + 1;
+		if(type == 1){
+			enemies_1.add(new Enemy_1(this, newCharacter , enemyX, enemyY));
+		}
+		else if(type == 2){
+			enemies_2.add(new Enemy_2(this, newCharacter , enemyX, enemyY));
+		}
+		else if(type == 3){
+			enemies_3.add(new Enemy_3(this, newCharacter , enemyX, enemyY));
+		}
 	}
 	 
 	 public  void createProjectile(Projectile newProjectile, float newX, float newY, double newXVel, double newYVel, double newAngle){
@@ -118,15 +131,29 @@ public class World {
 			
 		}
 		
-		for(int i = 0; i < enemies.size(); i++){
-			
-			enemies.get(i).update(delta);
-				                  
-		}
-		for(int i = 0; i < enemies.size(); i++){
-			enemies.get(i).draw(); 
+		for(int i = 0; i < enemies_1.size(); i++){
+			enemies_1.get(i).update(delta);            
 		}
 		
+		for(int i = 0; i < enemies_2.size(); i++){
+			enemies_2.get(i).update(delta);            
+		}
+		
+		for(int i = 0; i < enemies_3.size(); i++){
+			enemies_3.get(i).update(delta);            
+		}
+		
+		for(int i = 0; i < enemies_1.size(); i++){
+			enemies_1.get(i).draw(); 
+		}
+		
+		for(int i = 0; i < enemies_2.size(); i++){
+			enemies_2.get(i).draw(); 
+		}
+		
+		for(int i = 0; i < enemies_3.size(); i++){
+			enemies_3.get(i).draw(); 
+		}
 	}
 	
 	public void draw(){

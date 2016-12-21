@@ -10,8 +10,8 @@ import org.newdawn.slick.Color;
 
 public class Main {
 	
-	int width = 800;
-	int height = 600;
+	int width = 960;
+	int height = 540;
 	
 	boolean fullscreen = true;
 	
@@ -53,7 +53,7 @@ public class Main {
 			if(!fullscreen){
 				Display.setDisplayMode(new DisplayMode(width, height));
 			}
-		
+			
 			Display.create();
 			Keyboard.create();
 			
@@ -69,8 +69,8 @@ public class Main {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	    GL11.glShadeModel(GL11.GL_SMOOTH);        
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glDisable(GL11.GL_LIGHTING);                    
-	 
+		GL11.glDisable(GL11.GL_LIGHTING); 
+		
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);                
 	    GL11.glClearDepth(1);                                       
 	 
@@ -81,6 +81,8 @@ public class Main {
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0, width, height, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		
+		Display.setVSyncEnabled(true);
 		
 		Font newFont = new Font();
 		
@@ -125,7 +127,7 @@ public class Main {
 			
 			Display.update();
 			
-			Display.sync(144);
+			Display.sync(60);
 			
 		}
 		

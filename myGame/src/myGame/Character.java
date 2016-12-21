@@ -3,13 +3,9 @@ package myGame;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
-
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
@@ -27,7 +23,7 @@ public class Character{
 	float x = 0;
 	float y = 0;
 	
-	int health = 200;
+	int health = 20000;
 	
 	int doEngines = 0;
 	
@@ -135,8 +131,8 @@ public class Character{
 		
 		currentAngle = shipAngle;
 		
-		if(attackTimer != 0){
-			attackTimer--;
+		if(attackTimer < 500){
+			attackTimer += delta;
 		}
 		
 		velocityAngle = Math.atan2(yVel, xVel);
@@ -202,11 +198,11 @@ public class Character{
 			
 		}
 		
-		if(Keyboard.isKeyDown(shoot) && attackTimer == 0){
+		if(Keyboard.isKeyDown(shoot) && attackTimer >= 500){
 			
 			playSound(shootSound);
 			
-			attackTimer = 72;
+			attackTimer = 0;
 			
 			float newX = 0;
 			float newY = 0;
@@ -270,8 +266,8 @@ public class Character{
 			
 		}
 		
-		if(gameWorld.enemies.size() == 0){
-			enemiesToSpawn = rnd.nextInt(6) + 3;
+		if(gameWorld.enemies_1.size() + gameWorld.enemies_2.size() + gameWorld.enemies_3.size() == 0){
+			enemiesToSpawn = rnd.nextInt(5) + 3;
 			
 			
 			for(int i = 0; i < enemiesToSpawn; i++){
@@ -285,9 +281,9 @@ public class Character{
 			x = 10;
 		}
 		
-		if(x > 800 - 24){
+		if(x > 960 - 24){
 			xVel = 0;
-			x = 800 - 24;
+			x = 960 - 24;
 		}	
 			
 		if(y < 5){
@@ -295,9 +291,9 @@ public class Character{
 			y = 5;
 		}
 		
-		if(y > 600 - 34){
+		if(y > 540 - 34){
 			yVel = 0;
-			y = 600 - 34;
+			y = 540 - 34;
 		}
 		//if(doEngines == 0){
 		
@@ -321,12 +317,9 @@ public class Character{
 	public void playSound(File sound){
 		
 		try{
-			AudioInputStream audioIn = AudioSystem.getAudioInputStream(sound);
-			
-			AudioFormat format = audioIn.getFormat();
-			DataLine.Info info = new DataLine.Info(Clip.class, format);
-			Clip clip = (Clip)AudioSystem.getLine(info);
-			clip.open(AudioSystem.getAudioInputStream(sound));
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(sound);
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
 			clip.start();
 		}
 		catch(Exception e){
@@ -370,7 +363,7 @@ public class Character{
 			}
 		}
 		
-		if(Keyboard.isKeyDown(shoot) && attackTimer > 53){
+		if(Keyboard.isKeyDown(shoot) && attackTimer < 50){
 			if(index == 1){
 				drawTexture(pew, x - 3, y + 14);
 			}

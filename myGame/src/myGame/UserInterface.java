@@ -152,7 +152,9 @@ public class UserInterface {
 			newCharacter.y = 285;
 			newCharacter.speed = 0;
 			newCharacter.shipAngle = 179;
-			gameWorld.enemies.clear();
+			gameWorld.enemies_1.clear();
+			gameWorld.enemies_2.clear();
+			gameWorld.enemies_3.clear();
 			gameWorld.enemyProjectiles.clear();
 			gameWorld.projectiles.clear();
 			gameWorld.mainMenu = false;
